@@ -2,8 +2,6 @@ import {
   Box, 
   Typography, 
   Button, 
-  AppBar, 
-  Toolbar, 
   Container,
   useTheme,
   Paper,
@@ -14,10 +12,6 @@ import {
   CircularProgress
 } from '@mui/material';
 import { 
-  FlightTakeoff, 
-  Add, 
-  Person, 
-  LocationOn,
   CalendarToday,
   AttachMoney,
   Group,
@@ -28,8 +22,10 @@ import {
   LocationOnRounded,
   HotelRounded,
   RestaurantRounded,
-  AttractionsRounded
+  AttractionsRounded,
+  FlightTakeoff
 } from '@mui/icons-material';
+import Header from './Header';
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import travelAIService from '../services/travelAIService';
@@ -39,18 +35,7 @@ import { keyframes } from '@emotion/react';
 // Define keyframes
 const float = keyframes`
   0% { transform: translateY(0px); }
-  50% { transform:                    <Card
-                      sx={{
-                        backgroundColor: 'rgba(30, 41, 59, 0.8)',
-                        borderRadius: '16px',
-                        p: 3,
-                        display: 'flex',
-                        gap: 3,
-                        minHeight: '160px',
-                        height: 'auto',
-                        backdropFilter: 'blur(10px)',
-                        border: 'none',
-                        boxShadow: 'none',x); }
+  50% { transform: translateY(-20px); }
   100% { transform: translateY(0px); }
 `;
 
@@ -420,7 +405,64 @@ const TripResults = () => {
       setError('Failed to generate trip with AI. Using sample data.');
       
       // Use mock data as fallback
-      const mockData = travelAIService.generateMockData(userPreferences);
+      const mockData = {
+        destination: 'Paris',
+        duration: '4',
+        budget: 'cheap',
+        travelers: 'solo',
+        hotels: [
+          {
+            name: 'Hotel de Ville',
+            description: 'Elegant hotel in the heart of Paris with stunning views of the city.',
+            priceRange: '€200-300 per night'
+          },
+          {
+            name: 'Champs-Élysées Plaza',
+            description: 'Luxury accommodation near the famous avenue with world-class amenities.',
+            priceRange: '€300-400 per night'
+          }
+        ],
+        itinerary: [
+          {
+            day: 1,
+            activities: [
+              {
+                time: '9:00 AM - 12:00 PM',
+                name: 'Eiffel Tower Visit',
+                description: 'Start your day with a visit to the iconic Eiffel Tower. Enjoy panoramic views of Paris.',
+                duration: '3 hours',
+                cost: '€30'
+              },
+              {
+                time: '2:00 PM - 5:00 PM',
+                name: 'Louvre Museum',
+                description: 'Explore the world\'s largest art museum and see the famous Mona Lisa.',
+                duration: '3 hours',
+                cost: '€20'
+              }
+            ]
+          },
+          {
+            day: 2,
+            activities: [
+              {
+                time: '10:00 AM - 1:00 PM',
+                name: 'Notre-Dame Cathedral',
+                description: 'Visit the medieval Catholic cathedral known for its French Gothic architecture.',
+                duration: '3 hours',
+                cost: 'Free'
+              },
+              {
+                time: '3:00 PM - 6:00 PM',
+                name: 'Seine River Cruise',
+                description: 'Enjoy a relaxing cruise along the Seine River with commentary on Paris landmarks.',
+                duration: '3 hours',
+                cost: '€25'
+              }
+            ]
+          }
+        ]
+      };
       setTripData(mockData);
     } finally {
       setLoading(false);
@@ -552,98 +594,8 @@ const TripResults = () => {
 
       {/* Floating Background Elements */}
       <FloatingElements />
-      {/* Navigation Bar */}
-      <AppBar 
-        position="static" 
-        elevation={0}
-        sx={{
-          backgroundColor: 'transparent',
-          borderBottom: 'none',
-          position: 'relative',
-          zIndex: 10,
-        }}
-      >
-        <Toolbar sx={{ justifyContent: 'space-between', py: 2 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 1,
-                background: 'rgba(255, 255, 255, 0.1)',
-                padding: '4px 8px',
-                borderRadius: '8px'
-              }}
-            >
-              <FlightTakeoff 
-                sx={{ 
-                  color: '#EC4899', 
-                  fontSize: '1.5rem'
-                }} 
-              />
-              <Typography 
-                variant="h6" 
-                sx={{ 
-                  fontWeight: 600, 
-                  color: 'white',
-                  fontSize: '1.2rem',
-                  cursor: 'pointer'
-                }}
-                onClick={() => navigate('/')}
-              >
-                TravelAI
-              </Typography>
-            </Box>
-          </Box>
-          
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <Button
-              startIcon={<Add />}
-              sx={{
-                color: 'white',
-                textTransform: 'none',
-                fontSize: '0.9rem',
-                fontWeight: 500,
-                backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                borderRadius: '8px',
-                px: 2,
-                '&:hover': {
-                  backgroundColor: 'rgba(255, 255, 255, 0.15)',
-                }
-              }}
-            >
-              + Create Trip
-            </Button>
-            <Button
-              sx={{
-                color: 'white',
-                textTransform: 'none',
-                fontSize: '0.9rem',
-                fontWeight: 500,
-                '&:hover': {
-                  backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                }
-              }}
-            >
-              My Trips
-            </Button>
-            <Box
-              sx={{
-                width: 36,
-                height: 36,
-                borderRadius: '50%',
-                background: '#EC4899',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-              }}
-            >
-              <Person sx={{ color: 'white', fontSize: '1.2rem' }} />
-            </Box>
-          </Box>
-        </Toolbar>
-      </AppBar>
+      {/* Header Component */}
+      <Header />
 
       {/* Main Content */}
       <Container maxWidth="lg" sx={{ py: 4, position: 'relative', zIndex: 5 }}>
@@ -652,11 +604,17 @@ const TripResults = () => {
           elevation={0}
           sx={{
             background: 'linear-gradient(135deg, #EC4899 0%, #8B5CF6 100%)',
-            borderRadius: '20px',
+            borderRadius: '24px',
             p: 4,
             mb: 4,
             position: 'relative',
-            overflow: 'hidden'
+            overflow: 'hidden',
+            transition: 'all 0.3s ease',
+            cursor: 'pointer',
+            '&:hover': {
+              transform: 'translateY(-5px)',
+              boxShadow: '0 10px 30px rgba(236, 72, 153, 0.3)'
+            }
           }
         }>
           <Box sx={{ position: 'relative', zIndex: 1 }}>
@@ -726,7 +684,13 @@ const TripResults = () => {
               borderRadius: '24px',
               p: 4,
               position: 'relative',
-              overflow: 'hidden'
+              overflow: 'hidden',
+              transition: 'all 0.3s ease',
+              cursor: 'pointer',
+              '&:hover': {
+                transform: 'translateY(-5px)',
+                boxShadow: '0 10px 30px rgba(236, 72, 153, 0.3)'
+              }
             }}
           >
             <Box sx={{ maxWidth: '800px', margin: '0 auto' }}>
