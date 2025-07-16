@@ -1,15 +1,16 @@
-import { 
-  Box, 
-  Typography, 
-  Button, 
-  AppBar, 
-  Toolbar, 
+import {
+  Box,
+  Typography,
+  Button,
+  AppBar,
+  Toolbar,
   Container,
   useTheme,
   Paper
 } from '@mui/material';
 import { FlightTakeoff, Add, Person } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
+import FloatingOrbs from './FloatingOrbs';
 
 const Home = () => {
   const theme = useTheme();
@@ -34,62 +35,19 @@ const Home = () => {
         overflow: 'hidden',
       }}
     >
-      {/* Decorative circles */}
-      <Box
-        sx={{
-          position: 'absolute',
-          top: '15%',
-          left: '5%',
-          width: 80,
-          height: 80,
-          borderRadius: '50%',
-          background: 'linear-gradient(45deg, #8B5CF6, #EC4899)',
-          opacity: 0.3,
-        }}
-      />
-      <Box
-        sx={{
-          position: 'absolute',
-          bottom: '20%',
-          right: '8%',
-          width: 60,
-          height: 60,
-          borderRadius: '50%',
-          background: 'linear-gradient(45deg, #EC4899, #8B5CF6)',
-          opacity: 0.3,
-        }}
-      />
+      {/* Orbs + Stars Background */}
+      <FloatingOrbs />
 
       {/* Navigation Bar */}
-      <AppBar 
-        position="static" 
-        elevation={0}
-        sx={{
-          backgroundColor: 'transparent',
-          borderBottom: 'none',
-        }}
-      >
+      <AppBar position="static" elevation={0} sx={{ backgroundColor: 'transparent', borderBottom: 'none' }}>
         <Toolbar sx={{ justifyContent: 'space-between', py: 2 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <FlightTakeoff 
-              sx={{ 
-                color: theme.palette.primary.main, 
-                fontSize: '2rem',
-                transform: 'rotate(-45deg)'
-              }} 
-            />
-            <Typography 
-              variant="h6" 
-              sx={{ 
-                fontWeight: 'bold', 
-                color: 'white',
-                fontSize: '1.5rem'
-              }}
-            >
+            <FlightTakeoff sx={{ color: theme.palette.primary.main, fontSize: '2rem', transform: 'rotate(-45deg)' }} />
+            <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'white', fontSize: '1.5rem' }}>
               TravelAI
             </Typography>
           </Box>
-          
+
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
             <Button
               startIcon={<Add />}
@@ -138,13 +96,7 @@ const Home = () => {
 
       {/* Main Content */}
       <Container maxWidth="lg" sx={{ py: 8 }}>
-        <Box 
-          sx={{ 
-            textAlign: 'center',
-            mb: 8,
-            pt: 4
-          }}
-        >
+        <Box sx={{ textAlign: 'center', mb: 8, pt: 4 }}>
           <Typography
             variant="h1"
             sx={{
@@ -169,11 +121,10 @@ const Home = () => {
             >
               AI
             </span>
-            :{' '}
-            <br />
+            :<br />
             Personalized Itineraries at Your Fingertips
           </Typography>
-          
+
           <Typography
             variant="body1"
             sx={{

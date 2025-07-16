@@ -30,6 +30,7 @@ import {
 } from '@mui/icons-material';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import FloatingOrbs from './FloatingOrbs';
 
 const TravelPreferences = () => {
   const theme = useTheme();
@@ -159,6 +160,7 @@ const TravelPreferences = () => {
           opacity: 0.3,
         }}
       />
+      <FloatingOrbs/>
 
       {/* Navigation Bar */}
       <AppBar 
