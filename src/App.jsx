@@ -3,6 +3,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './components/Home';
 import TravelPreferences from './components/TravelPreferences';
+import TripResults from './components/TripResults';
 
 // Create a dark theme with purple accents
 const theme = createTheme({
@@ -47,6 +48,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/preferences" element={<TravelPreferences />} />
+          <Route path="/results" element={<TripResults />} />
         </Routes>
       </Router>
     </ThemeProvider>

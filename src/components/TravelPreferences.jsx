@@ -50,8 +50,18 @@ const TravelPreferences = () => {
   };
 
   const handleGenerateTrip = () => {
-    // Handle trip generation logic here
-    console.log('Generating trip with:', formData);
+    // Validate form data
+    if (!formData.destination || !formData.duration || !formData.budget || !formData.travelers) {
+      alert('Please fill in all required fields');
+      return;
+    }
+
+    // Navigate to results page with user preferences
+    navigate('/results', {
+      state: {
+        preferences: formData
+      }
+    });
   };
 
   const budgetOptions = [
@@ -304,11 +314,14 @@ const TravelPreferences = () => {
                 <MenuItem value="" sx={{ color: 'rgba(255, 255, 255, 0.5)' }}>
                   Select...
                 </MenuItem>
-                <MenuItem value="paris">Paris, France</MenuItem>
-                <MenuItem value="tokyo">Tokyo, Japan</MenuItem>
-                <MenuItem value="new-york">New York, USA</MenuItem>
-                <MenuItem value="london">London, UK</MenuItem>
-                <MenuItem value="bali">Bali, Indonesia</MenuItem>
+                <MenuItem value="Paris">Paris, France</MenuItem>
+                <MenuItem value="Tokyo">Tokyo, Japan</MenuItem>
+                <MenuItem value="New York">New York, USA</MenuItem>
+                <MenuItem value="London">London, UK</MenuItem>
+                <MenuItem value="Bali">Bali, Indonesia</MenuItem>
+                <MenuItem value="Rome">Rome, Italy</MenuItem>
+                <MenuItem value="Barcelona">Barcelona, Spain</MenuItem>
+                <MenuItem value="Dubai">Dubai, UAE</MenuItem>
               </Select>
             </FormControl>
           </Box>
