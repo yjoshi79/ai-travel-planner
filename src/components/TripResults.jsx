@@ -345,25 +345,27 @@ const TripResults = () => {
           </Typography>
           <Grid container spacing={3}>
             {tripData?.hotels?.map((hotel, index) => (
-              <Grid item xs={12} md={4} key={index}>
+              <Grid item xs={12} md={6} key={index}>
                 <Card
                   sx={{
                     background: 'linear-gradient(135deg, #EC4899 0%, #8B5CF6 100%)',
                     borderRadius: '20px',
-                    height: '180px',
+                    p: 3,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     cursor: 'pointer',
                     transition: 'all 0.3s ease',
                     border: 'none',
+                    minHeight: '180px',
+                    height: 'auto',
                     '&:hover': {
                       transform: 'translateY(-5px)',
                       boxShadow: '0 10px 30px rgba(236, 72, 153, 0.3)',
                     }
                   }}
                 >
-                  <CardContent sx={{ textAlign: 'center' }}>
+                  <CardContent sx={{ textAlign: 'center', width: '100%' }}>
                     <Typography variant="h6" sx={{ color: 'white', fontWeight: 600, mb: 1 }}>
                       {hotel.name}
                     </Typography>
@@ -419,7 +421,8 @@ const TripResults = () => {
                         p: 3,
                         display: 'flex',
                         gap: 2,
-                        height: '100%',
+                        minHeight: '180px',
+                        height: 'auto',
                         transition: 'all 0.3s ease',
                         '&:hover': {
                           backgroundColor: 'rgba(30, 41, 59, 0.9)',
@@ -437,7 +440,7 @@ const TripResults = () => {
                           flexShrink: 0,
                         }}
                       />
-                      <Box sx={{ flex: 1 }}>
+                      <Box sx={{ flex: 1, overflow: 'hidden' }}>
                         <Typography 
                           variant="body2" 
                           sx={{ 
@@ -455,7 +458,8 @@ const TripResults = () => {
                             fontWeight: 600, 
                             mb: 1,
                             fontSize: '1.1rem',
-                            lineHeight: 1.3
+                            lineHeight: 1.3,
+                            wordWrap: 'break-word'
                           }}
                         >
                           {activity.name}
@@ -466,7 +470,8 @@ const TripResults = () => {
                             color: 'rgba(255, 255, 255, 0.8)', 
                             mb: 2,
                             fontSize: '0.9rem',
-                            lineHeight: 1.4
+                            lineHeight: 1.4,
+                            wordWrap: 'break-word'
                           }}
                         >
                           {activity.description}
