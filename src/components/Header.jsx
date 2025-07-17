@@ -51,6 +51,10 @@ const Header = () => {
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
                     <Button
                         startIcon={<Add />}
+                        onClick={() => {
+                            console.log('Navigating to preferences...');
+                            navigate('/preferences', { replace: true });
+                        }}
                         sx={{
                             color: 'white',
                             textTransform: 'none',

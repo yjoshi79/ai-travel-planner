@@ -45,16 +45,15 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Box sx={{ position: 'relative', minHeight: '100vh' }}>
-       
-        <Router>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/preferences" element={<TravelPreferences />} />
-          <Route path="/results" element={<TripResults />} />
-        </Routes>
+      <Router>
+        <Box sx={{ position: 'relative', minHeight: '100vh' }}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/preferences" element={<TravelPreferences />} />
+            <Route path="/results" element={<TripResults />} />
+          </Routes>
+        </Box>
       </Router>
-      </Box>
     </ThemeProvider>
   );
 }
