@@ -2,11 +2,9 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { Box } from '@mui/material';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './contexts/AuthContext';
 import Home from './components/Home';
 import TravelPreferences from './components/TravelPreferences';
 import TripResults from './components/TripResults';
-import ProtectedRoute from './components/ProtectedRoute';
 
 // Create a dark theme with purple accents
 const theme = createTheme({
@@ -45,34 +43,18 @@ const theme = createTheme({
 
 function App() {
   return (
-    <AuthProvider>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Router>
-          <Box sx={{ position: 'relative', minHeight: '100vh' }}>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route 
-                path="/preferences" 
-                element={
-                  <ProtectedRoute>
-                    <TravelPreferences />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route 
-                path="/results" 
-                element={
-                  <ProtectedRoute>
-                    <TripResults />
-                  </ProtectedRoute>
-                } 
-              />
-            </Routes>
-          </Box>
-        </Router>
-      </ThemeProvider>
-    </AuthProvider>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Router>
+        <Box sx={{ position: 'relative', minHeight: '100vh' }}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/preferences" element={<TravelPreferences />} />
+            <Route path="/results" element={<TripResults />} />
+          </Routes>
+        </Box>
+      </Router>
+    </ThemeProvider>
   );
 }
 

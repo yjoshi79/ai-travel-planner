@@ -1,7 +1,7 @@
-import { 
-  Box, 
-  Typography, 
-  Button, 
+import {
+  Box,
+  Typography,
+  Button,
   Container,
   useTheme,
   Paper,
@@ -11,7 +11,7 @@ import {
   Chip,
   CircularProgress
 } from '@mui/material';
-import { 
+import {
   CalendarToday,
   AttachMoney,
   Group,
@@ -295,6 +295,20 @@ const TripResults = () => {
         }}
       />
 
+      <Box
+        sx={{
+          position: 'fixed',
+          bottom: '25%',
+          left: '20%',
+          width: '50px',
+          height: '50px',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(168, 85, 247, 0.6) 0%, rgba(168, 85, 247, 0.3) 50%, transparent 100%)',
+          animation: `${orbGlow} 4s ease-in-out infinite, ${orbFloat} 7s ease-in-out infinite`,
+          zIndex: 0,
+        }}
+      />
+
       {/* Original floating travel icons */}
       <Box
         sx={{
@@ -309,7 +323,7 @@ const TripResults = () => {
       >
         <FlightRounded sx={{ fontSize: '3rem' }} />
       </Box>
-      
+
       <Box
         sx={{
           position: 'fixed',
@@ -389,7 +403,7 @@ const TripResults = () => {
   const generateTripItinerary = async () => {
     try {
       setLoading(true);
-      
+
       // Check if we have user preferences
       if (!userPreferences || Object.keys(userPreferences).length === 0) {
         setError('No preferences found. Please start over.');
@@ -399,27 +413,38 @@ const TripResults = () => {
       // Use the travel AI service to generate the itinerary
       const tripData = await travelAIService.generateTripItinerary(userPreferences);
       setTripData(tripData);
-      
+
     } catch (error) {
       console.error('Error generating trip:', error);
       setError('Failed to generate trip with AI. Using sample data.');
-      
-      // Use mock data as fallback
+
+      // Use mock data as fallback - UPDATED MOCK DATA
       const mockData = {
         destination: 'Paris',
+        description: 'Welcome to the City of Light, where timeless elegance meets contemporary charm. Paris, a global epicenter of art, fashion, gastronomy, and culture, invites you to explore its enchanting streets and discover the magic that has captivated visitors for centuries.',
+        stats: {
+          historicSites: 850,
+          museums: 130,
+          restaurants: 40000
+        },
         duration: '4',
         budget: 'cheap',
         travelers: 'solo',
         hotels: [
           {
             name: 'Hotel de Ville',
-            description: 'Elegant hotel in the heart of Paris with stunning views of the city.',
-            priceRange: '€200-300 per night'
+            description: 'An elegant hotel in the heart of Paris with stunning views of the city, close to major attractions and Metro access.',
+            priceRange: '₹18,000 - ₹27,000 per night'
           },
           {
             name: 'Champs-Élysées Plaza',
-            description: 'Luxury accommodation near the famous avenue with world-class amenities.',
-            priceRange: '€300-400 per night'
+            description: 'Luxury accommodation near the famous avenue with world-class amenities, including a spa and Michelin-starred dining.',
+            priceRange: '₹27,000 - ₹36,000 per night'
+          },
+          {
+            name: 'Le Marais Boutique',
+            description: 'A charming boutique hotel nestled in the historic Le Marais district, known for its art galleries and vibrant nightlife.',
+            priceRange: '₹13,500 - ₹22,500 per night'
           }
         ],
         itinerary: [
@@ -431,14 +456,14 @@ const TripResults = () => {
                 name: 'Eiffel Tower Visit',
                 description: 'Start your day with a visit to the iconic Eiffel Tower. Enjoy panoramic views of Paris.',
                 duration: '3 hours',
-                cost: '€30'
+                cost: '₹2,700'
               },
               {
                 time: '2:00 PM - 5:00 PM',
                 name: 'Louvre Museum',
                 description: 'Explore the world\'s largest art museum and see the famous Mona Lisa.',
                 duration: '3 hours',
-                cost: '€20'
+                cost: '₹1,800'
               }
             ]
           },
@@ -457,7 +482,45 @@ const TripResults = () => {
                 name: 'Seine River Cruise',
                 description: 'Enjoy a relaxing cruise along the Seine River with commentary on Paris landmarks.',
                 duration: '3 hours',
-                cost: '€25'
+                cost: '₹2,250'
+              }
+            ]
+          },
+          {
+            day: 3,
+            activities: [
+              {
+                time: '9:30 AM - 12:30 PM',
+                name: 'Montmartre & Sacré-Cœur Basilica',
+                description: 'Wander through the artistic district of Montmartre and visit the stunning Sacré-Cœur Basilica for breathtaking city views.',
+                duration: '3 hours',
+                cost: 'Free (Basilica entry)'
+              },
+              {
+                time: '1:30 PM - 3:30 PM',
+                name: 'Moulin Rouge Show (Exterior)',
+                description: 'Pass by the legendary Moulin Rouge cabaret. Consider booking a show for the evening if interested.',
+                duration: '2 hours',
+                cost: 'Exterior view: Free / Show: Varies'
+              }
+            ]
+          },
+          {
+            day: 4,
+            activities: [
+              {
+                time: '10:00 AM - 1:00 PM',
+                name: 'Palace of Versailles (Day Trip)',
+                description: 'Take a day trip to the magnificent Palace of Versailles, explore its opulent interiors and vast gardens.',
+                duration: '4 hours (travel included)',
+                cost: '₹2,400'
+              },
+              {
+                time: '3:00 PM - 5:00 PM',
+                name: 'Shopping at Galeries Lafayette',
+                description: 'Indulge in some retail therapy at the famous Galeries Lafayette department store, known for its stunning architecture and luxury brands.',
+                duration: '2 hours',
+                cost: 'Varies by shopping'
               }
             ]
           }
@@ -493,11 +556,11 @@ const TripResults = () => {
       <Box
         sx={{
           minHeight: '100vh',
-          background: `linear-gradient(135deg, 
-            ${theme.palette.background.default} 0%, 
-            #1E293B 25%, 
-            #334155 50%, 
-            #475569 75%, 
+          background: `linear-gradient(135deg,
+            ${theme.palette.background.default} 0%,
+            #1E293B 25%,
+            #334155 50%,
+            #475569 75%,
             #64748B 100%
           )`,
           display: 'flex',
@@ -505,14 +568,14 @@ const TripResults = () => {
           justifyContent: 'center',
         }}
       >
-        <FloatingOrbs/>
+        <FloatingOrbs />
         <Box sx={{ textAlign: 'center', color: 'white' }}>
-          <CircularProgress 
-            sx={{ 
+          <CircularProgress
+            sx={{
               color: theme.palette.primary.main,
-              mb: 2 
-            }} 
-            size={60} 
+              mb: 2
+            }}
+            size={60}
           />
           <Typography variant="h6" sx={{ mb: 1 }}>
             Generating Your Perfect Trip...
@@ -530,11 +593,11 @@ const TripResults = () => {
       <Box
         sx={{
           minHeight: '100vh',
-          background: `linear-gradient(135deg, 
-            ${theme.palette.background.default} 0%, 
-            #1E293B 25%, 
-            #334155 50%, 
-            #475569 75%, 
+          background: `linear-gradient(135deg,
+            ${theme.palette.background.default} 0%,
+            #1E293B 25%,
+            #334155 50%,
+            #475569 75%,
             #64748B 100%
           )`,
           display: 'flex',
@@ -567,19 +630,19 @@ const TripResults = () => {
     <Box
       sx={{
         minHeight: '100vh',
-        background: `linear-gradient(135deg, 
-          ${theme.palette.background.default} 0%, 
-          #1E293B 25%, 
-          #334155 50%, 
-          #475569 75%, 
+        background: `linear-gradient(135deg,
+          ${theme.palette.background.default} 0%,
+          #1E293B 25%,
+          #334155 50%,
+          #475569 75%,
           #64748B 100%
         )`,
         position: 'relative',
         overflow: 'hidden',
       }}
     >
-      <FloatingOrbs/>
-      {/* Paris Description */}
+      <FloatingOrbs />
+      {/* Paris Description Background Overlay (kept for visual effect, content moved to Card) */}
       <Box
         sx={{
           position: 'fixed',
@@ -616,23 +679,23 @@ const TripResults = () => {
               boxShadow: '0 10px 30px rgba(236, 72, 153, 0.3)'
             }
           }
-        }>
+          }>
           <Box sx={{ position: 'relative', zIndex: 1 }}>
-            <Typography 
-              variant="h2" 
-              sx={{ 
-                color: 'white', 
-                fontWeight: 700, 
+            <Typography
+              variant="h2"
+              sx={{
+                color: 'white',
+                fontWeight: 700,
                 mb: 2,
                 fontSize: { xs: '2rem', md: '2.5rem' }
               }}
             >
-              {tripData?.destination || 'Paris'}
+              {tripData?.destination || 'Your Dream Destination'}
             </Typography>
             <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
               <Chip
                 icon={<CalendarToday />}
-                label={`${tripData?.duration || '4'} Days`}
+                label={`${tripData?.duration || 'X'} Days`}
                 sx={{
                   backgroundColor: 'rgba(255, 255, 255, 0.2)',
                   color: 'white',
@@ -667,16 +730,17 @@ const TripResults = () => {
               zIndex: 1,
             }}
           >
-            <Send 
-              sx={{ 
-                color: 'white', 
+            <Send
+              sx={{
+                color: 'white',
                 fontSize: '2rem',
                 transform: 'rotate(45deg)'
-              }} 
+              }}
             />
           </Box>
         </Paper>
 
+        {/* Destination Description */}
         <Box sx={{ mb: 4 }}>
           <Card
             sx={{
@@ -704,7 +768,7 @@ const TripResults = () => {
                   fontSize: '2.5rem'
                 }}
               >
-                Discover Paris
+                Discover {tripData?.destination || 'Your Destination'}
               </Typography>
               <Typography
                 variant="body1"
@@ -716,8 +780,9 @@ const TripResults = () => {
                   fontSize: '1.1rem'
                 }}
               >
-                Welcome to the City of Light, where timeless elegance meets contemporary charm. Paris, a global epicenter of art, fashion, gastronomy, and culture, invites you to explore its enchanting streets and discover the magic that has captivated visitors for centuries.
+                {tripData?.description || 'Your personalized description of the destination will appear here, highlighting key attractions and unique aspects based on your preferences.'}
               </Typography>
+              {/* These statistics should ideally come from AI as well, or be generalized */}
               <Box
                 sx={{
                   display: 'flex',
@@ -728,196 +793,208 @@ const TripResults = () => {
                 }}
               >
                 <Box sx={{ textAlign: 'center' }}>
-                  <Typography variant="h4" sx={{ color: 'white', fontWeight: 700, mb: 1 }}>850+</Typography>
+                  <Typography variant="h4" sx={{ color: 'white', fontWeight: 700, mb: 1 }}>{tripData?.stats?.historicSites || 'N/A'}+</Typography>
                   <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.8)' }}>Historic Sites</Typography>
                 </Box>
                 <Box sx={{ textAlign: 'center' }}>
-                  <Typography variant="h4" sx={{ color: 'white', fontWeight: 700, mb: 1 }}>130+</Typography>
+                  <Typography variant="h4" sx={{ color: 'white', fontWeight: 700, mb: 1 }}>{tripData?.stats?.museums || 'N/A'}+</Typography>
                   <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.8)' }}>Museums</Typography>
                 </Box>
                 <Box sx={{ textAlign: 'center' }}>
-                  <Typography variant="h4" sx={{ color: 'white', fontWeight: 700, mb: 1 }}>40K+</Typography>
+                  <Typography variant="h4" sx={{ color: 'white', fontWeight: 700, mb: 1 }}>{tripData?.stats?.restaurants ? `${(tripData.stats.restaurants / 1000).toFixed(0)}K+` : 'N/A'}</Typography>
                   <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.8)' }}>Restaurants</Typography>
                 </Box>
               </Box>
             </Box>
           </Card>
         </Box>
+
         {/* Hotel Recommendations */}
         <Box sx={{ mb: 6 }}>
-          <Typography 
-            variant="h4" 
-            sx={{ 
-              color: 'white', 
-              fontWeight: 600, 
+          <Typography
+            variant="h4"
+            sx={{
+              color: 'white',
+              fontWeight: 600,
               mb: 4,
               fontSize: '2rem'
             }}
           >
-            Hotel Recommendation
+            Hotel Recommendations
           </Typography>
 
-          {/* Paris Description Card */}
-          
-
           <Grid container spacing={3}>
-            {tripData?.hotels?.map((hotel, index) => (
-              <Grid item xs={12} md={6} key={index}>
-                <Card
-                  sx={{
-                    background: 'linear-gradient(135deg, #EC4899 0%, #8B5CF6 100%)',
-                    borderRadius: '20px',
-                    p: 3,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    cursor: 'pointer',
-                    border: 'none',
-                    minHeight: '180px',
-                    height: 'auto',
-                    transition: 'all 0.3s ease',
-                    '&:hover': {
-                      transform: 'translateY(-5px)',
-                      boxShadow: '0 10px 30px rgba(236, 72, 153, 0.3)'
+            {tripData?.hotels?.length > 0 ? (
+              tripData.hotels.map((hotel, index) => (
+                <Grid item xs={12} md={6} key={index}>
+                  <Card
+                    sx={{
+                      background: 'linear-gradient(135deg, #EC4899 0%, #8B5CF6 100%)',
+                      borderRadius: '20px',
+                      p: 3,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      cursor: 'pointer',
+                      border: 'none',
+                      minHeight: '180px',
+                      height: 'auto',
+                      transition: 'all 0.3s ease',
+                      '&:hover': {
+                        transform: 'translateY(-5px)',
+                        boxShadow: '0 10px 30px rgba(236, 72, 153, 0.3)'
+                      }
                     }
-                  }
-                }>
-                  <CardContent sx={{ textAlign: 'center', width: '100%' }}>
-                    <Typography variant="h6" sx={{ color: 'white', fontWeight: 600, mb: 1 }}>
-                      {hotel.name}
-                    </Typography>
-                    <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.8)', mb: 1 }}>
-                      {hotel.description}
-                    </Typography>
-                    <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.9)', fontWeight: 500 }}>
-                      {hotel.priceRange}
-                    </Typography>
-                  </CardContent>
-                </Card>
+                    }>
+                    <CardContent sx={{ textAlign: 'center', width: '100%' }}>
+                      <Typography variant="h6" sx={{ color: 'white', fontWeight: 600, mb: 1 }}>
+                        {hotel.name}
+                      </Typography>
+                      <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.8)', mb: 1 }}>
+                        {hotel.description}
+                      </Typography>
+                      <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.9)', fontWeight: 500 }}>
+                        {hotel.priceRange}
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              ))
+            ) : (
+              <Grid item xs={12}>
+                <Typography variant="body1" sx={{ color: 'rgba(255, 255, 255, 0.7)', textAlign: 'center' }}>
+                  No hotel recommendations available.
+                </Typography>
               </Grid>
-            ))}
+            )}
           </Grid>
         </Box>
 
         {/* Your Itinerary */}
         <Box>
-          <Typography 
-            variant="h4" 
-            sx={{ 
-              color: 'white', 
-              fontWeight: 600, 
+          <Typography
+            variant="h4"
+            sx={{
+              color: 'white',
+              fontWeight: 600,
               mb: 4,
               fontSize: { xs: '1.5rem', md: '2rem' }
             }}
           >
             Your Itinerary
           </Typography>
-          
-          {tripData?.itinerary?.map((day, dayIndex) => (
-            <Box key={dayIndex} sx={{ mb: 6 }}>
-              <Typography 
-                variant="h5" 
-                sx={{ 
-                  color: 'white', 
-                  fontWeight: 600, 
-                  mb: 3,
-                  fontSize: { xs: '1.3rem', md: '1.5rem' }
-                }}
-              >
-                Day {day.day}
-              </Typography>
-              
-              <Grid container spacing={3}>
-                {day.activities?.map((activity, activityIndex) => (
-                  <Grid item xs={12} md={6} key={activityIndex}>
-                    <Card
-                      sx={{
-                        backgroundColor: 'rgba(30, 41, 59, 0.8)',
-                        border: '1px solid rgba(255, 255, 255, 0.1)',
-                        borderRadius: '20px',
-                        p: 3,
-                        display: 'flex',
-                        gap: 2,
-                        minHeight: '180px',
-                        height: 'auto',
-                        transition: 'all 0.3s ease',
-                        '&:hover': {
-                          backgroundColor: 'rgba(30, 41, 59, 0.9)',
-                          transform: 'translateY(-2px)',
-                          border: '1px solid rgba(255, 255, 255, 0.2)'
-                        }
-                      }}
-                    >
-                      <Box
+
+          {tripData?.itinerary?.length > 0 ? (
+            tripData.itinerary.map((day, dayIndex) => (
+              <Box key={dayIndex} sx={{ mb: 6 }}>
+                <Typography
+                  variant="h5"
+                  sx={{
+                    color: 'white',
+                    fontWeight: 600,
+                    mb: 3,
+                    fontSize: { xs: '1.3rem', md: '1.5rem' }
+                  }}
+                >
+                  Day {day.day}
+                </Typography>
+
+                <Grid container spacing={3}>
+                  {day.activities?.map((activity, activityIndex) => (
+                    <Grid item xs={12} md={6} key={activityIndex}>
+                      <Card
                         sx={{
-                          width: 80,
-                          height: 80,
-                          borderRadius: '16px',
-                          background: 'linear-gradient(135deg, #EC4899 0%, #8B5CF6 100%)',
-                          flexShrink: 0
-                        }
-                      }
-                      />
-                      <Box sx={{ flex: 1, overflow: 'hidden' }}>
-                        <Typography 
-                          variant="body2" 
-                          sx={{ 
-                            color: '#EC4899', 
-                            mb: 1,
-                            fontSize: '0.9rem',
-                            fontWeight: 500
-                          }}
-                        >
-                          {activity.time}
-                        </Typography>
-                        <Typography 
-                          variant="h6" 
-                          sx={{ 
-                            color: 'white', 
-                            fontWeight: 600, 
-                            mb: 2,
-                            fontSize: '1.1rem',
-                            lineHeight: 1.3
-                          }}
-                        >
-                          {activity.name}
-                        </Typography>
-                        <Typography 
-                          variant="body2" 
-                          sx={{ 
-                            color: 'rgba(255, 255, 255, 0.7)', 
-                            mb: 2,
-                            fontSize: '0.9rem',
-                            lineHeight: 1.6
-                          }}
-                        >
-                          {activity.description}
-                        </Typography>
-                        <Box sx={{ display: 'flex', gap: 3, alignItems: 'center' }}>
-                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                            <AccessTime sx={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: '0.9rem' }} />
-                            <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '0.85rem' }}>
-                              {activity.duration}
-                            </Typography>
-                          </Box>
-                          <Typography 
-                            variant="body2" 
-                            sx={{ 
-                              color: activity.cost === 'Free' ? '#22C55E' : '#8B5CF6',
-                              fontWeight: 600,
-                              fontSize: '0.85rem'
+                          backgroundColor: 'rgba(30, 41, 59, 0.8)',
+                          border: '1px solid rgba(255, 255, 255, 0.1)',
+                          borderRadius: '20px',
+                          p: 3,
+                          display: 'flex',
+                          gap: 2,
+                          minHeight: '180px',
+                          height: 'auto',
+                          transition: 'all 0.3s ease',
+                          '&:hover': {
+                            backgroundColor: 'rgba(30, 41, 59, 0.9)',
+                            transform: 'translateY(-2px)',
+                            border: '1px solid rgba(255, 255, 255, 0.2)'
+                          }
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            width: 80,
+                            height: 80,
+                            borderRadius: '16px',
+                            background: 'linear-gradient(135deg, #EC4899 0%, #8B5CF6 100%)',
+                            flexShrink: 0
+                          }
+                          }
+                        />
+                        <Box sx={{ flex: 1, overflow: 'hidden' }}>
+                          <Typography
+                            variant="body2"
+                            sx={{
+                              color: '#EC4899',
+                              mb: 1,
+                              fontSize: '0.9rem',
+                              fontWeight: 500
                             }}
                           >
-                            {activity.cost}
+                            {activity.time}
                           </Typography>
+                          <Typography
+                            variant="h6"
+                            sx={{
+                              color: 'white',
+                              fontWeight: 600,
+                              mb: 2,
+                              fontSize: '1.1rem',
+                              lineHeight: 1.3
+                            }}
+                          >
+                            {activity.name}
+                          </Typography>
+                          <Typography
+                            variant="body2"
+                            sx={{
+                              color: 'rgba(255, 255, 255, 0.7)',
+                              mb: 2,
+                              fontSize: '0.9rem',
+                              lineHeight: 1.6
+                            }}
+                          >
+                            {activity.description}
+                          </Typography>
+                          <Box sx={{ display: 'flex', gap: 3, alignItems: 'center' }}>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                              <AccessTime sx={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: '0.9rem' }} />
+                              <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '0.85rem' }}>
+                                {activity.duration}
+                              </Typography>
+                            </Box>
+                            <Typography
+                              variant="body2"
+                              sx={{
+                                color: activity.cost === 'Free' ? '#22C55E' : '#8B5CF6',
+                                fontWeight: 600,
+                                fontSize: '0.85rem'
+                              }}
+                            >
+                              {activity.cost}
+                            </Typography>
+                          </Box>
                         </Box>
-                      </Box>
-                    </Card>
-                  </Grid>
-                ))}
-              </Grid>
-            </Box>
-          ))}
+                      </Card>
+                    </Grid>
+                  ))}
+                </Grid>
+              </Box>
+            ))
+          ) : (
+            <Typography variant="body1" sx={{ color: 'rgba(255, 255, 255, 0.7)', textAlign: 'center' }}>
+              No itinerary details available.
+            </Typography>
+          )}
         </Box>
       </Container>
     </Box>
