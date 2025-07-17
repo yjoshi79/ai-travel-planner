@@ -420,31 +420,26 @@ const TripResults = () => {
 
       // Use mock data as fallback - UPDATED MOCK DATA
       const mockData = {
-        destination: 'Paris',
-        description: 'Welcome to the City of Light, where timeless elegance meets contemporary charm. Paris, a global epicenter of art, fashion, gastronomy, and culture, invites you to explore its enchanting streets and discover the magic that has captivated visitors for centuries.',
-        stats: {
-          historicSites: 850,
-          museums: 130,
-          restaurants: 40000
-        },
+        destination: userPreferences.destination || 'Your Destination',
+        description: 'Welcome! Your personalized description of the destination will appear here, highlighting key attractions and unique aspects based on your preferences.',
         duration: '4',
         budget: 'cheap',
         travelers: 'solo',
         hotels: [
           {
             name: 'Hotel de Ville',
-            description: 'An elegant hotel in the heart of Paris with stunning views of the city, close to major attractions and Metro access.',
-            priceRange: '₹18,000 - ₹27,000 per night'
+            description: 'An elegant hotel in the heart of the city with stunning views, close to major attractions and local transportation.',
+            priceRange: 'INR 20,250 - 31,500 per night'
           },
           {
             name: 'Champs-Élysées Plaza',
             description: 'Luxury accommodation near the famous avenue with world-class amenities, including a spa and Michelin-starred dining.',
-            priceRange: '₹27,000 - ₹36,000 per night'
+            priceRange: 'INR 27,000 - 36,000 per night'
           },
           {
             name: 'Le Marais Boutique',
-            description: 'A charming boutique hotel nestled in the historic Le Marais district, known for its art galleries and vibrant nightlife.',
-            priceRange: '₹13,500 - ₹22,500 per night'
+            description: 'A charming boutique hotel nestled in the historic district, known for its local art galleries and vibrant nightlife.',
+            priceRange: 'INR 13,500 - 22,500 per night'
           }
         ],
         itinerary: [
@@ -456,14 +451,14 @@ const TripResults = () => {
                 name: 'Eiffel Tower Visit',
                 description: 'Start your day with a visit to the iconic Eiffel Tower. Enjoy panoramic views of Paris.',
                 duration: '3 hours',
-                cost: '₹2,700'
+                cost: 'INR 2,700'
               },
               {
                 time: '2:00 PM - 5:00 PM',
                 name: 'Louvre Museum',
                 description: 'Explore the world\'s largest art museum and see the famous Mona Lisa.',
                 duration: '3 hours',
-                cost: '₹1,800'
+                cost: 'INR 1,800'
               }
             ]
           },
@@ -482,7 +477,7 @@ const TripResults = () => {
                 name: 'Seine River Cruise',
                 description: 'Enjoy a relaxing cruise along the Seine River with commentary on Paris landmarks.',
                 duration: '3 hours',
-                cost: '₹2,250'
+                cost: 'INR 2,250'
               }
             ]
           },
@@ -513,7 +508,7 @@ const TripResults = () => {
                 name: 'Palace of Versailles (Day Trip)',
                 description: 'Take a day trip to the magnificent Palace of Versailles, explore its opulent interiors and vast gardens.',
                 duration: '4 hours (travel included)',
-                cost: '₹2,400'
+                cost: 'INR 2,400'
               },
               {
                 time: '3:00 PM - 5:00 PM',
@@ -549,6 +544,12 @@ const TripResults = () => {
       friends: { label: 'Friends', count: '4+' }
     };
     return travelersMap[travelers] || { label: 'Solo Traveler', count: '1' };
+  };
+
+  const handleMapClick = (mapUrl) => {
+    if (mapUrl) {
+      window.open(mapUrl, '_blank', 'noopener,noreferrer');
+    }
   };
 
   if (loading) {
@@ -801,7 +802,7 @@ const TripResults = () => {
                   <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.8)' }}>Museums</Typography>
                 </Box>
                 <Box sx={{ textAlign: 'center' }}>
-                  <Typography variant="h4" sx={{ color: 'white', fontWeight: 700, mb: 1 }}>{tripData?.stats?.restaurants ? `${(tripData.stats.restaurants / 1000).toFixed(0)}K+` : 'N/A'}</Typography>
+                  <Typography variant="h4" sx={{ color: 'white', fontWeight: 700, mb: 1 }}>{tripData?.stats?.restaurants ? `${(tripData.stats.restaurants)}` : 'N/A'}</Typography>
                   <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.8)' }}>Restaurants</Typography>
                 </Box>
               </Box>
@@ -828,6 +829,7 @@ const TripResults = () => {
               tripData.hotels.map((hotel, index) => (
                 <Grid item xs={12} md={6} key={index}>
                   <Card
+                    onClick={() => handleMapClick(hotel.mapUrl)}
                     sx={{
                       background: 'linear-gradient(135deg, #EC4899 0%, #8B5CF6 100%)',
                       borderRadius: '20px',
@@ -903,6 +905,7 @@ const TripResults = () => {
                   {day.activities?.map((activity, activityIndex) => (
                     <Grid item xs={12} md={6} key={activityIndex}>
                       <Card
+                        onClick={() => handleMapClick(activity.mapUrl)}
                         sx={{
                           backgroundColor: 'rgba(30, 41, 59, 0.8)',
                           border: '1px solid rgba(255, 255, 255, 0.1)',
@@ -913,6 +916,7 @@ const TripResults = () => {
                           minHeight: '180px',
                           height: 'auto',
                           transition: 'all 0.3s ease',
+                          cursor: 'pointer',
                           '&:hover': {
                             backgroundColor: 'rgba(30, 41, 59, 0.9)',
                             transform: 'translateY(-2px)',
