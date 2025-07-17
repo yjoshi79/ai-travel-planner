@@ -69,6 +69,7 @@ const AuthModal = ({ open, onClose, onSuccess }) => {
 
       if (result.success) {
         // Handle signup confirmation message
+        if (!isLogin && result.message) {
           setError(result.message); // Show confirmation message in modal
           setLoading(false);
           return;
@@ -79,11 +80,6 @@ const AuthModal = ({ open, onClose, onSuccess }) => {
         reset();
       } else {
         // Handle specific error messages
-        if (result.error && result.error.includes('Email not confirmed')) {
-          setError('Your email is not confirmed. Please check your inbox for a verification link.');
-        } else {
-          setError(result.error || 'Authentication failed');
-        }
         if (result.error && result.error.includes('Email not confirmed')) {
           setError('Your email is not confirmed. Please check your inbox for a verification link.');
         } else {
@@ -177,15 +173,8 @@ const AuthModal = ({ open, onClose, onSuccess }) => {
                 color: error.includes('check your email') || error.includes('confirmation') 
                   ? '#2196f3' 
                   : '#f44336',
-                  ? 'rgba(33, 150, 243, 0.1)' 
-                  : 'rgba(244, 67, 54, 0.1)',
-                color: error.includes('check your email') || error.includes('confirmation') 
-                  ? '#2196f3' 
-                  : '#f44336',
                 '& .MuiAlert-icon': {
                   color: error.includes('check your email') || error.includes('confirmation') 
-                    ? '#2196f3' 
-                    : '#f44336'
                     ? '#2196f3' 
                     : '#f44336'
                 }
