@@ -164,7 +164,7 @@ const AuthModal = ({ open, onClose, onSuccess }) => {
           {/* Error Alert */}
           {error && (
             <Alert 
-              severity={error.includes('check your email') || error.includes('confirmation') ? "info" : "error"}
+              severity={error.includes('check your email') || error.includes('confirmation') ? 'info' : 'error'}
               sx={{ 
                 mb: 3,
                 backgroundColor: error.includes('check your email') || error.includes('confirmation') 
