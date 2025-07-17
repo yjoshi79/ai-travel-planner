@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     AppBar,
     Toolbar,
@@ -213,26 +213,6 @@ const Header = () => {
                     onClose={() => setAuthModalOpen(false)}
                     onSuccess={handleAuthSuccess}
                 />
-            </Toolbar>
-        </AppBar>
-    );
-};
-
-export default Header;
-                        sx={{
-                            width: 40,
-                            height: 40,
-                            borderRadius: '50%',
-                            background: 'linear-gradient(45deg, #8B5CF6, #EC4899)',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            cursor: 'pointer',
-                        }}
-                    >
-                        <Person sx={{ color: 'white', fontSize: '1.2rem' }} />
-                    </Box>
-                </Box>
             </Toolbar>
         </AppBar>
     );
