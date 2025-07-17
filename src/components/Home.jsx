@@ -12,12 +12,24 @@ import { FlightTakeoff, Add, Person } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import FloatingOrbs from './FloatingOrbs';
 import Header from './Header';
+import AuthModal from './AuthModal';
+import { useAuth } from '../contexts/AuthContext';
 
 const Home = () => {
   const theme = useTheme();
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
+  const [authModalOpen, setAuthModalOpen] = useState(false);
 
   const handleGetStarted = () => {
+    if (isAuthenticated()) {
+      navigate('/preferences');
+    } else {
+      setAuthModalOpen(true);
+    }
+  };
+
+  const handleAuthSuccess = () => {
     navigate('/preferences');
   };
 
@@ -112,6 +124,13 @@ const Home = () => {
           >
             Get Started, It's Free
           </Button>
+
+          {/* Auth Modal */}
+          <AuthModal
+            open={authModalOpen}
+            onClose={() => setAuthModalOpen(false)}
+            onSuccess={handleAuthSuccess}
+          />
         </Box>
 
         {/* Interactive Preview Section */}
