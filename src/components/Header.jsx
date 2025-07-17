@@ -15,7 +15,7 @@ import AuthModal from './AuthModal';
 const Header = () => {
     const navigate = useNavigate();
     const theme = useTheme();
-    const { isAuthenticated, user, logout } = useAuth();
+    const { isAuthenticated, user, logout, getUserDisplayName, getUserAvatar } = useAuth();
     const [authModalOpen, setAuthModalOpen] = useState(false);
     const [userMenuAnchor, setUserMenuAnchor] = useState(null);
 
@@ -125,8 +125,8 @@ const Header = () => {
                         >
                             {user?.avatar ? (
                                 <img 
-                                    src={user.avatar} 
-                                    alt={user.name}
+                                    src={getUserAvatar()} 
+                                    alt={getUserDisplayName()}
                                     style={{
                                         width: '100%',
                                         height: '100%',
@@ -136,7 +136,7 @@ const Header = () => {
                                 />
                             ) : (
                                 <Typography sx={{ color: 'white', fontSize: '1rem', fontWeight: 600 }}>
-                                    {user?.name?.charAt(0)?.toUpperCase() || 'U'}
+                                    {getUserDisplayName()?.charAt(0)?.toUpperCase() || 'U'}
                                 </Typography>
                             )}
                         </Box>
@@ -181,7 +181,7 @@ const Header = () => {
                         >
                             <Box sx={{ px: 2, py: 1, borderBottom: '1px solid rgba(255, 255, 255, 0.1)' }}>
                                 <Typography variant="subtitle2" sx={{ color: 'white', fontWeight: 600 }}>
-                                    {user?.name}
+                                    {getUserDisplayName()}
                                 </Typography>
                                 <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
                                     {user?.email}

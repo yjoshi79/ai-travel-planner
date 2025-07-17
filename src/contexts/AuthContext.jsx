@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import Cookies from 'js-cookie';
+import { supabase } from '../lib/supabase';
 
 const AuthContext = createContext();
 
@@ -17,79 +17,121 @@ export const AuthProvider = ({ children }) => {
 
   // Check for existing session on app load
   useEffect(() => {
-    const savedUser = Cookies.get('travel_ai_user');
-    if (savedUser) {
-      try {
-        setUser(JSON.parse(savedUser));
-      } catch (error) {
-        console.error('Error parsing saved user:', error);
-        Cookies.remove('travel_ai_user');
-      }
-    }
-    setLoading(false);
+    // Get initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+      setLoading(false);
+    });
+
+    // Listen for auth changes
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+      setLoading(false);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   const login = async (email, password) => {
     try {
-      // Simulate API call - replace with actual authentication
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      setLoading(true);
       
-      // Mock user data - replace with actual user data from API
-      const userData = {
-        id: Date.now(),
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
-        name: email.split('@')[0],
-        avatar: null
-      };
-
-      // Save user data with 60-minute expiration
-      Cookies.set('travel_ai_user', JSON.stringify(userData), { 
-        expires: 1/24, // 1 hour (1/24 of a day)
-        secure: true,
-        sameSite: 'strict'
+        password,
       });
 
-      setUser(userData);
+      if (error) {
+        throw error;
+      }
+
+      // User will be set automatically by the auth state change listener
       return { success: true };
     } catch (error) {
-      return { success: false, error: error.message };
+      console.error('Login error:', error);
+      return { 
+        success: false, 
+        error: error.message || 'Login failed. Please check your credentials.' 
+      };
+    } finally {
+      setLoading(false);
     }
   };
 
   const signup = async (name, email, password) => {
     try {
-      // Simulate API call - replace with actual registration
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      setLoading(true);
       
-      // Mock user data - replace with actual user data from API
-      const userData = {
-        id: Date.now(),
+      const { data, error } = await supabase.auth.signUp({
         email,
-        name,
-        avatar: null
-      };
-
-      // Save user data with 60-minute expiration
-      Cookies.set('travel_ai_user', JSON.stringify(userData), { 
-        expires: 1/24, // 1 hour (1/24 of a day)
-        secure: true,
-        sameSite: 'strict'
+        password,
+        options: {
+          data: {
+            full_name: name,
+            display_name: name,
+          }
+        }
       });
 
-      setUser(userData);
+      if (error) {
+        throw error;
+      }
+
+      // Check if email confirmation is required
+      if (data.user && !data.session) {
+        return { 
+          success: true, 
+          message: 'Please check your email to confirm your account before signing in.' 
+        };
+      }
+
+      // User will be set automatically by the auth state change listener
       return { success: true };
     } catch (error) {
-      return { success: false, error: error.message };
+      console.error('Signup error:', error);
+      return { 
+        success: false, 
+        error: error.message || 'Signup failed. Please try again.' 
+      };
+    } finally {
+      setLoading(false);
     }
   };
 
-  const logout = () => {
-    Cookies.remove('travel_ai_user');
-    setUser(null);
+  const logout = async () => {
+    try {
+      setLoading(true);
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        throw error;
+      }
+      // User will be set to null automatically by the auth state change listener
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const isAuthenticated = () => {
     return !!user;
+  };
+
+  // Get user display name
+  const getUserDisplayName = () => {
+    if (!user) return '';
+    return user.user_metadata?.full_name || 
+           user.user_metadata?.display_name || 
+           user.email?.split('@')[0] || 
+           'User';
+  };
+
+  // Get user avatar URL
+  const getUserAvatar = () => {
+    if (!user) return null;
+    return user.user_metadata?.avatar_url || null;
   };
 
   const value = {
@@ -98,7 +140,9 @@ export const AuthProvider = ({ children }) => {
     signup,
     logout,
     isAuthenticated,
-    loading
+    loading,
+    getUserDisplayName,
+    getUserAvatar
   };
 
   return (

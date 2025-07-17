@@ -68,6 +68,14 @@ const AuthModal = ({ open, onClose, onSuccess }) => {
       }
 
       if (result.success) {
+        // Handle signup confirmation message
+        if (result.message) {
+          setError(''); // Clear any previous errors
+          // You could show a success message here instead of error
+          alert(result.message);
+          return;
+        }
+        
         onSuccess();
         onClose();
         reset();
@@ -75,6 +83,7 @@ const AuthModal = ({ open, onClose, onSuccess }) => {
         setError(result.error || 'Authentication failed');
       }
     } catch (err) {
+      console.error('Auth error:', err);
       setError('An unexpected error occurred');
     } finally {
       setLoading(false);
