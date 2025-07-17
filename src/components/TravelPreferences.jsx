@@ -29,9 +29,11 @@ import {
   Home,
   Groups
 } from '@mui/icons-material';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import FloatingOrbs from './FloatingOrbs';
+import useLocationAutocomplete from '../hooks/useLocationAutocomplete';
+import React from 'react';
 
 const TravelPreferences = () => {
   const theme = useTheme();
@@ -43,6 +45,19 @@ const TravelPreferences = () => {
     budget: '',
     travelers: ''
   });
+  const [searchQuery, setSearchQuery] = useState('');
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const { suggestions, loading, error, searchLocations } = useLocationAutocomplete();
+
+  useEffect(() => {
+    const debounceTimer = setTimeout(() => {
+      if (searchQuery) {
+        searchLocations(searchQuery);
+      }
+    }, 300);
+
+    return () => clearTimeout(debounceTimer);
+  }, [searchQuery]);
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({
@@ -50,6 +65,38 @@ const TravelPreferences = () => {
       [field]: value
     }));
   };
+
+  const handleDestinationChange = (event) => {
+    const value = event.target.value;
+    setSearchQuery(value);
+    setShowSuggestions(true);
+  };
+
+  const handleDestinationSelect = (suggestion) => {
+    setFormData(prev => ({
+      ...prev,
+      destination: suggestion.value
+    }));
+    setSearchQuery(suggestion.label);
+    setShowSuggestions(false);
+  };
+
+  // Reference to hold the input container
+  const containerRef = React.useRef(null);
+
+  // Hide suggestions when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (containerRef.current && !containerRef.current.contains(event.target)) {
+        setShowSuggestions(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const handleGenerateTrip = () => {
     // Validate form data
@@ -202,56 +249,79 @@ const TravelPreferences = () => {
         {/* Form Section */}
         <Box sx={{ mb: 4 }}>
           {/* Destination */}
-          <Box sx={{ mb: 4 }}>
+          <Box sx={{ mb: 4 }} ref={containerRef}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
               <LocationOn sx={{ color: 'white', fontSize: '1.5rem' }} />
               <Typography variant="h6" sx={{ color: 'white', fontWeight: 600 }}>
                 What is destination of choice?
               </Typography>
             </Box>
-            <FormControl fullWidth>
-              <Select
-                value={formData.destination}
-                onChange={(e) => handleInputChange('destination', e.target.value)}
-                displayEmpty
-                sx={{
+            <TextField
+              fullWidth
+              value={searchQuery}
+              onChange={handleDestinationChange}
+              placeholder="Type to search destinations..."
+              sx={{
+                '& .MuiOutlinedInput-root': {
                   backgroundColor: 'rgba(255, 255, 255, 0.1)',
                   color: 'white',
-                  '& .MuiOutlinedInput-notchedOutline': {
+                  '& fieldset': {
                     borderColor: 'rgba(255, 255, 255, 0.3)',
                   },
-                  '&:hover .MuiOutlinedInput-notchedOutline': {
+                  '&:hover fieldset': {
                     borderColor: 'rgba(255, 255, 255, 0.5)',
                   },
-                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                  '&.Mui-focused fieldset': {
                     borderColor: theme.palette.primary.main,
                   },
-                  '& .MuiSelect-icon': {
-                    color: 'white',
-                  },
+                },
+                '& .MuiInputBase-input::placeholder': {
+                  color: 'rgba(255, 255, 255, 0.5)',
+                },
+              }}
+            />
+            {showSuggestions && suggestions.length > 0 && searchQuery && (
+              <Box
+                sx={{
+                  position: 'absolute',
+                  zIndex: 1,
+                  width: '100%',
+                  maxHeight: '200px',
+                  overflowY: 'auto',
+                  mt: 1,
+                  backgroundColor: theme.palette.background.paper,
+                  borderRadius: 1,
+                  boxShadow: 3,
                 }}
-                MenuProps={{
-                  PaperProps: {
-                    sx: {
-                      bgcolor: '#1E293B',
-                      color: 'white',
-                    },
-                  },
-                }}
+                onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside suggestions
               >
-                <MenuItem value="" sx={{ color: 'rgba(255, 255, 255, 0.5)' }}>
-                  Select...
-                </MenuItem>
-                <MenuItem value="Paris">Paris, France</MenuItem>
-                <MenuItem value="Tokyo">Tokyo, Japan</MenuItem>
-                <MenuItem value="New York">New York, USA</MenuItem>
-                <MenuItem value="London">London, UK</MenuItem>
-                <MenuItem value="Bali">Bali, Indonesia</MenuItem>
-                <MenuItem value="Rome">Rome, Italy</MenuItem>
-                <MenuItem value="Barcelona">Barcelona, Spain</MenuItem>
-                <MenuItem value="Dubai">Dubai, UAE</MenuItem>
-              </Select>
-            </FormControl>
+                {suggestions.map((suggestion) => (
+                  <Box
+                    key={suggestion.id}
+                    onClick={() => handleDestinationSelect(suggestion)}
+                    sx={{
+                      p: 2,
+                      cursor: 'pointer',
+                      '&:hover': {
+                        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                      },
+                    }}
+                  >
+                    <Typography color="white">{suggestion.label}</Typography>
+                  </Box>
+                ))}
+              </Box>
+            )}
+            {loading && (
+              <Typography sx={{ color: 'rgba(255, 255, 255, 0.7)', mt: 1 }}>
+                Loading suggestions...
+              </Typography>
+            )}
+            {error && (
+              <Typography sx={{ color: theme.palette.error.main, mt: 1 }}>
+                {error}
+              </Typography>
+            )}
           </Box>
 
           {/* Duration */}

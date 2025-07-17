@@ -3,6 +3,7 @@ import { Box } from '@mui/material';
 import { keyframes } from '@mui/system';
 
 // Keyframes
+
 const starRise = keyframes`
   0% {
     transform: translateY(100vh) scale(0);
