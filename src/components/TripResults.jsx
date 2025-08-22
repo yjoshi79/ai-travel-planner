@@ -416,112 +416,7 @@ const TripResults = () => {
 
     } catch (error) {
       console.error('Error generating trip:', error);
-      setError('Failed to generate trip with AI. Using sample data.');
-
-      // Use mock data as fallback - UPDATED MOCK DATA
-      const mockData = {
-        destination: userPreferences.destination || 'Your Destination',
-        description: 'Welcome! Your personalized description of the destination will appear here, highlighting key attractions and unique aspects based on your preferences.',
-        duration: '4',
-        budget: 'cheap',
-        travelers: 'solo',
-        hotels: [
-          {
-            name: 'Hotel de Ville',
-            description: 'An elegant hotel in the heart of the city with stunning views, close to major attractions and local transportation.',
-            priceRange: 'INR 20,250 - 31,500 per night'
-          },
-          {
-            name: 'Champs-Élysées Plaza',
-            description: 'Luxury accommodation near the famous avenue with world-class amenities, including a spa and Michelin-starred dining.',
-            priceRange: 'INR 27,000 - 36,000 per night'
-          },
-          {
-            name: 'Le Marais Boutique',
-            description: 'A charming boutique hotel nestled in the historic district, known for its local art galleries and vibrant nightlife.',
-            priceRange: 'INR 13,500 - 22,500 per night'
-          }
-        ],
-        itinerary: [
-          {
-            day: 1,
-            activities: [
-              {
-                time: '9:00 AM - 12:00 PM',
-                name: 'Eiffel Tower Visit',
-                description: 'Start your day with a visit to the iconic Eiffel Tower. Enjoy panoramic views of Paris.',
-                duration: '3 hours',
-                cost: 'INR 2,700'
-              },
-              {
-                time: '2:00 PM - 5:00 PM',
-                name: 'Louvre Museum',
-                description: 'Explore the world\'s largest art museum and see the famous Mona Lisa.',
-                duration: '3 hours',
-                cost: 'INR 1,800'
-              }
-            ]
-          },
-          {
-            day: 2,
-            activities: [
-              {
-                time: '10:00 AM - 1:00 PM',
-                name: 'Notre-Dame Cathedral',
-                description: 'Visit the medieval Catholic cathedral known for its French Gothic architecture.',
-                duration: '3 hours',
-                cost: 'Free'
-              },
-              {
-                time: '3:00 PM - 6:00 PM',
-                name: 'Seine River Cruise',
-                description: 'Enjoy a relaxing cruise along the Seine River with commentary on Paris landmarks.',
-                duration: '3 hours',
-                cost: 'INR 2,250'
-              }
-            ]
-          },
-          {
-            day: 3,
-            activities: [
-              {
-                time: '9:30 AM - 12:30 PM',
-                name: 'Montmartre & Sacré-Cœur Basilica',
-                description: 'Wander through the artistic district of Montmartre and visit the stunning Sacré-Cœur Basilica for breathtaking city views.',
-                duration: '3 hours',
-                cost: 'Free (Basilica entry)'
-              },
-              {
-                time: '1:30 PM - 3:30 PM',
-                name: 'Moulin Rouge Show (Exterior)',
-                description: 'Pass by the legendary Moulin Rouge cabaret. Consider booking a show for the evening if interested.',
-                duration: '2 hours',
-                cost: 'Exterior view: Free / Show: Varies'
-              }
-            ]
-          },
-          {
-            day: 4,
-            activities: [
-              {
-                time: '10:00 AM - 1:00 PM',
-                name: 'Palace of Versailles (Day Trip)',
-                description: 'Take a day trip to the magnificent Palace of Versailles, explore its opulent interiors and vast gardens.',
-                duration: '4 hours (travel included)',
-                cost: 'INR 2,400'
-              },
-              {
-                time: '3:00 PM - 5:00 PM',
-                name: 'Shopping at Galeries Lafayette',
-                description: 'Indulge in some retail therapy at the famous Galeries Lafayette department store, known for its stunning architecture and luxury brands.',
-                duration: '2 hours',
-                cost: 'Varies by shopping'
-              }
-            ]
-          }
-        ]
-      };
-      setTripData(mockData);
+      setError('Failed to generate trip with AI. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -544,12 +439,6 @@ const TripResults = () => {
       friends: { label: 'Friends', count: '4+' }
     };
     return travelersMap[travelers] || { label: 'Solo Traveler', count: '1' };
-  };
-
-  const handleMapClick = (mapUrl) => {
-    if (mapUrl) {
-      window.open(mapUrl, '_blank', 'noopener,noreferrer');
-    }
   };
 
   if (loading) {
@@ -824,12 +713,11 @@ const TripResults = () => {
             Hotel Recommendations
           </Typography>
 
-          <Grid container spacing={3}>
+          <Grid container spacing={3} justifyContent="center">
             {tripData?.hotels?.length > 0 ? (
               tripData.hotels.map((hotel, index) => (
-                <Grid item xs={12} md={6} key={index}>
+                <Grid item xs={12} sm={6} md={4} key={index}>
                   <Card
-                    onClick={() => handleMapClick(hotel.mapUrl)}
                     sx={{
                       background: 'linear-gradient(135deg, #EC4899 0%, #8B5CF6 100%)',
                       borderRadius: '20px',
@@ -837,17 +725,18 @@ const TripResults = () => {
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      cursor: 'pointer',
                       border: 'none',
                       minHeight: '180px',
                       height: 'auto',
                       transition: 'all 0.3s ease',
+                      maxWidth: 350,
+                      margin: '0 auto',
                       '&:hover': {
                         transform: 'translateY(-5px)',
                         boxShadow: '0 10px 30px rgba(236, 72, 153, 0.3)'
                       }
-                    }
-                    }>
+                    }}
+                  >
                     <CardContent sx={{ textAlign: 'center', width: '100%' }}>
                       <Typography variant="h6" sx={{ color: 'white', fontWeight: 600, mb: 1 }}>
                         {hotel.name}
@@ -901,11 +790,10 @@ const TripResults = () => {
                   Day {day.day}
                 </Typography>
 
-                <Grid container spacing={3}>
+                <Grid container spacing={3} justifyContent="center">
                   {day.activities?.map((activity, activityIndex) => (
-                    <Grid item xs={12} md={6} key={activityIndex}>
+                    <Grid item xs={12} sm={6} md={4} key={activityIndex}>
                       <Card
-                        onClick={() => handleMapClick(activity.mapUrl)}
                         sx={{
                           backgroundColor: 'rgba(30, 41, 59, 0.8)',
                           border: '1px solid rgba(255, 255, 255, 0.1)',
@@ -916,7 +804,8 @@ const TripResults = () => {
                           minHeight: '180px',
                           height: 'auto',
                           transition: 'all 0.3s ease',
-                          cursor: 'pointer',
+                          maxWidth: 350,
+                          margin: '0 auto',
                           '&:hover': {
                             backgroundColor: 'rgba(30, 41, 59, 0.9)',
                             transform: 'translateY(-2px)',
@@ -931,8 +820,7 @@ const TripResults = () => {
                             borderRadius: '16px',
                             background: 'linear-gradient(135deg, #EC4899 0%, #8B5CF6 100%)',
                             flexShrink: 0
-                          }
-                          }
+                          }}
                         />
                         <Box sx={{ flex: 1, overflow: 'hidden' }}>
                           <Typography
